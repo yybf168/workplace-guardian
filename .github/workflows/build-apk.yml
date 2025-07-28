@@ -1,0 +1,81 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.6'
+        channel: 'stable'
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: flutter build apk --release --split-per-abi
+      
+    - name: Upload APK artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: workplace-guardian-apk
+        path: |
+          build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+          build/app/outputs/flutter-apk/app-x86_64-release.apk
+        retention-days: 30
+        
+    - name: Create Release
+      if: github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.0.${{ github.run_number }}
+        name: 职场边界守卫 v1.0.${{ github.run_number }}
+        body: |
+          ## 📱 职场边界守卫 Android APK
+          
+          ### 🎯 功能特色
+          - 工时监控和加班检测
+          - 智能消息过滤
+          - 证据自动收集
+          - 健康中心和建议
+          - 实时通知提醒
+          
+          ### 📥 安装说明
+          1. 下载适合你手机的APK文件：
+             - `app-arm64-v8a-release.apk` - 适用于大多数现代手机
+             - `app-armeabi-v7a-release.apk` - 适用于较老的手机
+             - `app-x86_64-release.apk` - 适用于x86架构手机
+          2. 在手机设置中启用"未知来源"安装
+          3. 点击APK文件安装
+          4. 授予必要权限
+          
+          ### ⚠️ 注意事项
+          - 这是演示版本，使用模拟数据
+          - 某些功能需要特殊权限才能正常工作
+          - 建议在测试环境中使用
+          
+        files: |
+          build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+          build/app/outputs/flutter-apk/app-x86_64-release.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

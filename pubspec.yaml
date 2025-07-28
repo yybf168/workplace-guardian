@@ -1,0 +1,56 @@
+name: workplace_guardian
+description: 职场边界守卫 - 保护你的工作生活平衡
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # 数据库 (Web版本暂时使用内存存储)
+  # sqflite: ^2.3.0
+  # path: ^1.8.3
+  
+  # 权限管理 (暂时移除)
+  # permission_handler: ^11.0.1
+  
+  # 本地存储
+  shared_preferences: ^2.2.2
+  
+  # 加密
+  crypto: ^3.0.3
+  
+  # 应用使用统计 (暂时移除，需要特殊权限)
+  # usage_stats: ^1.3.0
+  
+  # 通知监听 (暂时移除，需要Android embedding v2)
+  # notification_listener_service: ^0.3.0
+  
+  # UI组件
+  cupertino_icons: ^1.0.2
+  
+  # 图表
+  fl_chart: ^0.64.0
+  
+  # 文件操作
+  path_provider: ^2.1.1
+  archive: ^3.4.9
+  
+  # 多语言支持
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # assets:
+    # - assets/images/
+    # - assets/icons/
